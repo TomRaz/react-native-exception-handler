@@ -40,22 +40,21 @@ void (^jsErrorCallbackBlock)(NSException *exception, NSString *readeableExceptio
 void (^defaultNativeErrorCallbackBlock)(NSException *exception, NSString *readeableException) =
 ^(NSException *exception, NSString *readeableException){
     
-    UIAlertController* alert = [UIAlertController
-                                alertControllerWithTitle:@"Unexpected error occured"
-                                message:[NSString stringWithFormat:@"%@\n%@",
-                                         @"Apologies..The app will close now \nPlease restart the app\n",
-                                         readeableException]
-                                preferredStyle:UIAlertControllerStyleAlert];
+      UIAlertController* alert = [UIAlertController
+                                  alertControllerWithTitle:@"Error in the Balltime app"
+                                  message: [NSString stringWithFormat:@"%@\n",
+                                            @"The Balltime app will automatically close in a few seconds, you can restart it after it closes."]
+                                  preferredStyle:UIAlertControllerStyleAlert];
     
-    UIApplication* app = [UIApplication sharedApplication];
-    UIViewController * rootViewController = app.delegate.window.rootViewController;
-    [rootViewController presentViewController:alert animated:YES completion:nil];
-    
-    [NSTimer scheduledTimerWithTimeInterval:5.0
-                                     target:[ReactNativeExceptionHandler class]
-                                   selector:@selector(releaseExceptionHold)
-                                   userInfo:nil
-                                    repeats:NO];
+      UIApplication* app = [UIApplication sharedApplication];
+      UIViewController * rootViewController = app.delegate.window.rootViewController;
+      [rootViewController presentViewController:alert animated:YES completion:nil];
+
+      [NSTimer scheduledTimerWithTimeInterval:20.0
+                                       target:[ReactNativeExceptionHandler class]
+                                     selector:@selector(releaseExceptionHold)
+                                     userInfo:nil
+                                      repeats:NO];
 };
 
 // ====================================
